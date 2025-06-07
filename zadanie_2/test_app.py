@@ -5,15 +5,24 @@ Testy jednostkowe dla app.py:
 - Testy parametryzowane z subTest()
 - Komentarze wyjaśniające testowane przypadki
 
-Przed uruchomieniem testów i mierzeniem pokrycia zainstaluj:
-    pip install coverage
+Instrukcje:
+1. Aktywacja środowiska i instalacja coverage:
+   .venv\Scripts\activate         # na Windows
+   pip install coverage
 
-Uruchamianie testów:
-    python -m unittest discover zadanie2
+2. Uruchamianie testów (bez coverage):
+   python -m unittest discover zadanie2
 
-Mierzenie pokrycia (coverage):
-    coverage run -m unittest discover zadanie2
-    coverage report -m
+3. Mierzenie pokrycia kodu z coverage:
+   python -m coverage run -m unittest discover zadanie2
+   python -m coverage report -m
+
+Opis testów:
+- test_validate_email: sprawdzanie list poprawnych i niepoprawnych e-maili
+- test_calculate_rectangle_area: wymiary dodatnie i ujemne, ValueError
+- test_filter_even_numbers: różne listy, oczekiwana filtracja
+- test_convert_date_format: poprawne i niepoprawne formaty daty, ValueError
+- test_is_palindrome: różne teksty, palindromy oraz nie
 """
 import unittest
 from app import (
