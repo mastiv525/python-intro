@@ -1,5 +1,3 @@
-
-
 # --- test_app.py ---
 import unittest
 from app import (
@@ -10,61 +8,109 @@ from app import (
     is_palindrome
 )
 
-
 class TestApp(unittest.TestCase):
-    # Testy dla validate_email
-    def test_validate_email_valid(self):
-        self.assertTrue(validate_email("test@example.com"))
+    def setUp(self):
+        """
+        Przygotowanie wspólnych danych testowych:
+        - valid_emails: lista poprawnych adresów e-mail
+        - invalid_emails: lista niepoprawnych adresów e-mail
+        - rectangle_dimensions: krotki (length, width, expected_area)
+        - negative_dimensions: wymiary prowadzące do ValueError
+        - number_lists: pary (input_list, expected_even_list)
+        - date_formats: krotki (input_date, expected_output)
+        - invalid_dates: formaty prowadzące do ValueError
+        - palindromes: krotki (text, expected_bool)
+        """
+        self.valid_emails = [
+            "user@example.com",
+            "first.last@domain.co",
+            "a.b-c_xy@sub.domain.org"
+        ]
+        self.invalid_emails = ["", "user@@example.com", "userexample.com", "user@.com"]
 
-    def test_validate_email_invalid(self):
-        self.assertFalse(validate_email("test@@example.com"))
+        self.rectangle_dimensions = [
+            (3, 4, 12),
+            (0, 5, 0),
+            (2.5, 4, 10)
+        ]
+        self.negative_dimensions = [(-1, 5), (5, -2)]
 
-    def test_validate_email_empty(self):
-        self.assertFalse(validate_email(""))
+        self.number_lists = [
+            ([1, 2, 3, 4], [2, 4]),
+            ([], []),
+            ([1, 3, 5], [])
+        ]
 
-    # Testy dla calculate_rectangle_area
-    def test_calculate_rectangle_area_typical(self):
-        self.assertEqual(calculate_rectangle_area(3, 4), 12)
+        self.date_formats = [
+            ("2025-06-07", "07/06/2025"),
+            ("2000-01-01", "01/01/2000")
+        ]
+        self.invalid_dates = ["07-06-2025", "", "2025/06/07"]
 
-    def test_calculate_rectangle_area_zero(self):
-        self.assertEqual(calculate_rectangle_area(0, 5), 0)
+        self.palindromes = [
+            ("A man, a plan, a canal: Panama", True),
+            ("No lemon, no melon", True),
+            ("hello", False),
+            ("", True)
+        ]
 
-    def test_calculate_rectangle_area_negative(self):
-        with self.assertRaises(ValueError):
-            calculate_rectangle_area(-1, 5)
+    def test_validate_email(self):
+        # Testowanie poprawnych i niepoprawnych adresów e-mail
+        for email in self.valid_emails:
+            with self.subTest(email=email):
+                self.assertTrue(
+                    validate_email(email),
+                    f"'{email}' powinno być uznane za poprawny email"
+                )
+        for email in self.invalid_emails:
+            with self.subTest(email=email):
+                self.assertFalse(
+                    validate_email(email),
+                    f"'{email}' powinno być uznane za niepoprawny email"
+                )
 
-    # Testy dla filter_even_numbers
-    def test_filter_even_numbers_typical(self):
-        self.assertEqual(filter_even_numbers([1, 2, 3, 4]), [2, 4])
+    def test_calculate_rectangle_area(self):
+        # Testowanie poprawnych wymiarów prostokąta
+        for length, width, expected in self.rectangle_dimensions:
+            with self.subTest(length=length, width=width):
+                self.assertEqual(
+                    calculate_rectangle_area(length, width),
+                    expected
+                )
+        # Testowanie ValueError dla ujemnych wymiarów
+        for length, width in self.negative_dimensions:
+            with self.subTest(length=length, width=width):
+                self.assertRaises(ValueError, calculate_rectangle_area, length, width)
 
-    def test_filter_even_numbers_empty(self):
-        self.assertEqual(filter_even_numbers([]), [])
+    def test_filter_even_numbers(self):
+        # Testowanie filtrowania liczb parzystych z różnych list
+        for data, expected in self.number_lists:
+            with self.subTest(data=data):
+                self.assertEqual(
+                    filter_even_numbers(data), expected
+                )
 
-    def test_filter_even_numbers_all_odd(self):
-        self.assertEqual(filter_even_numbers([1, 3, 5]), [])
+    def test_convert_date_format(self):
+        # Testowanie konwersji poprawnych formatów daty
+        for input_date, expected in self.date_formats:
+            with self.subTest(input_date=input_date):
+                self.assertEqual(
+                    convert_date_format(input_date), expected
+                )
+        # Testowanie ValueError dla niepoprawnych formatów
+        for date_str in self.invalid_dates:
+            with self.subTest(date_str=date_str):
+                self.assertRaises(ValueError, convert_date_format, date_str)
 
-    # Testy dla convert_date_format
-    def test_convert_date_format_typical(self):
-        self.assertEqual(convert_date_format("2025-06-07"), "07/06/2025")
-
-    def test_convert_date_format_invalid(self):
-        with self.assertRaises(ValueError):
-            convert_date_format("07-06-2025")
-
-    def test_convert_date_format_empty(self):
-        with self.assertRaises(ValueError):
-            convert_date_format("")
-
-    # Testy dla is_palindrome
-    def test_is_palindrome_true(self):
-        self.assertTrue(is_palindrome("A man, a plan, a canal: Panama"))
-
-    def test_is_palindrome_false(self):
-        self.assertFalse(is_palindrome("hello"))
-
-    def test_is_palindrome_empty(self):
-        self.assertTrue(is_palindrome(""))
-
+    def test_is_palindrome(self):
+        # Testowanie różnych ciągów tekstowych pod kątem palindromu
+        for text, expected in self.palindromes:
+            with self.subTest(text=text):
+                self.assertEqual(
+                    is_palindrome(text), expected
+                )
 
 if __name__ == '__main__':
-    unittest.main()
+    # Uruchomienie testów: python -m unittest
+    import sys
+    sys.exit(unittest.main())

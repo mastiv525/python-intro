@@ -1,12 +1,11 @@
-
 # --- app.py ---
 """
-Funkcje do lab 2 - Test-Driven Development (TDD)
-- validate_email(): https://docs.python.org/3/library/re.html
-- calculate_rectangle_area(): proste obliczenia matematyczne
-- filter_even_numbers(): operacje na listach
-- convert_date_format(): https://docs.python.org/3/library/datetime.html
-- is_palindrome(): przetwarzanie ciągów znaków
+Funkcje dla laboratorium 2 - Test-Driven Development (TDD)
+- validate_email(): walidacja adresu e-mail przy użyciu regex (moduł re)
+- calculate_rectangle_area(): obliczenie pola prostokąta, obsługa ValueError dla niepoprawnych wymiarów
+- filter_even_numbers(): filtracja liczb parzystych z listy
+- convert_date_format(): konwersja formatu daty (moduł datetime)
+- is_palindrome(): sprawdzenie, czy tekst jest palindromem, ignorowanie niealfanumerycznych znaków
 """
 import re
 from datetime import datetime
