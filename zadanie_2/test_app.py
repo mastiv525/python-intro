@@ -1,4 +1,20 @@
 # --- test_app.py ---
+"""
+Testy jednostkowe dla app.py:
+- Wykorzystanie setUp() do przygotowania danych testowych
+- Testy parametryzowane z subTest()
+- Komentarze wyjaśniające testowane przypadki
+
+Przed uruchomieniem testów i mierzeniem pokrycia zainstaluj:
+    pip install coverage
+
+Uruchamianie testów:
+    python -m unittest discover zadanie2
+
+Mierzenie pokrycia (coverage):
+    coverage run -m unittest discover zadanie2
+    coverage report -m
+"""
 import unittest
 from app import (
     validate_email,
@@ -10,17 +26,7 @@ from app import (
 
 class TestApp(unittest.TestCase):
     def setUp(self):
-        """
-        Przygotowanie wspólnych danych testowych:
-        - valid_emails: lista poprawnych adresów e-mail
-        - invalid_emails: lista niepoprawnych adresów e-mail
-        - rectangle_dimensions: krotki (length, width, expected_area)
-        - negative_dimensions: wymiary prowadzące do ValueError
-        - number_lists: pary (input_list, expected_even_list)
-        - date_formats: krotki (input_date, expected_output)
-        - invalid_dates: formaty prowadzące do ValueError
-        - palindromes: krotki (text, expected_bool)
-        """
+        # Przygotowanie wspólnych danych testowych
         self.valid_emails = [
             "user@example.com",
             "first.last@domain.co",
@@ -55,62 +61,45 @@ class TestApp(unittest.TestCase):
         ]
 
     def test_validate_email(self):
-        # Testowanie poprawnych i niepoprawnych adresów e-mail
+        # Poprawne i niepoprawne e-maile
         for email in self.valid_emails:
             with self.subTest(email=email):
-                self.assertTrue(
-                    validate_email(email),
-                    f"'{email}' powinno być uznane za poprawny email"
-                )
+                self.assertTrue(validate_email(email))
         for email in self.invalid_emails:
             with self.subTest(email=email):
-                self.assertFalse(
-                    validate_email(email),
-                    f"'{email}' powinno być uznane za niepoprawny email"
-                )
+                self.assertFalse(validate_email(email))
 
     def test_calculate_rectangle_area(self):
-        # Testowanie poprawnych wymiarów prostokąta
+        # Typowe oraz nietypowe wymiary prostokąta
         for length, width, expected in self.rectangle_dimensions:
             with self.subTest(length=length, width=width):
-                self.assertEqual(
-                    calculate_rectangle_area(length, width),
-                    expected
-                )
-        # Testowanie ValueError dla ujemnych wymiarów
+                self.assertEqual(calculate_rectangle_area(length, width), expected)
         for length, width in self.negative_dimensions:
             with self.subTest(length=length, width=width):
                 self.assertRaises(ValueError, calculate_rectangle_area, length, width)
 
     def test_filter_even_numbers(self):
-        # Testowanie filtrowania liczb parzystych z różnych list
+        # Filtrowanie liczb parzystych
         for data, expected in self.number_lists:
             with self.subTest(data=data):
-                self.assertEqual(
-                    filter_even_numbers(data), expected
-                )
+                self.assertEqual(filter_even_numbers(data), expected)
 
     def test_convert_date_format(self):
-        # Testowanie konwersji poprawnych formatów daty
+        # Konwersja daty i obsługa błędnych formatów
         for input_date, expected in self.date_formats:
             with self.subTest(input_date=input_date):
-                self.assertEqual(
-                    convert_date_format(input_date), expected
-                )
-        # Testowanie ValueError dla niepoprawnych formatów
+                self.assertEqual(convert_date_format(input_date), expected)
         for date_str in self.invalid_dates:
             with self.subTest(date_str=date_str):
                 self.assertRaises(ValueError, convert_date_format, date_str)
 
     def test_is_palindrome(self):
-        # Testowanie różnych ciągów tekstowych pod kątem palindromu
+        # Różne przypadki palindromów
         for text, expected in self.palindromes:
             with self.subTest(text=text):
-                self.assertEqual(
-                    is_palindrome(text), expected
-                )
+                self.assertEqual(is_palindrome(text), expected)
 
 if __name__ == '__main__':
-    # Uruchomienie testów: python -m unittest
+    # Uruchomienie testów: python -m unittest discover zadanie2
     import sys
     sys.exit(unittest.main())
