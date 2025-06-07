@@ -1,28 +1,33 @@
-# --- test_app.py ---
 """
 Testy jednostkowe dla app.py:
 - Wykorzystanie setUp() do przygotowania danych testowych
 - Testy parametryzowane z subTest()
 - Komentarze wyjaśniające testowane przypadki
 
-Instrukcje:
-1. Aktywacja środowiska i instalacja coverage:
-   .venv\Scripts\activate         # na Windows
-   pip install coverage
+Instrukcje krok-po-kroku:
+1. Aktywacja środowiska wirtualnego (Windows PowerShell):
+       .venv\Scripts\activate
+   lub (Git Bash):
+       source .venv/Scripts/activate
 
-2. Uruchamianie testów (bez coverage):
-   python -m unittest discover zadanie2
+2. Instalacja zależności:
+       pip install coverage
 
-3. Mierzenie pokrycia kodu z coverage:
-   python -m coverage run -m unittest discover zadanie2
-   python -m coverage report -m
+3. Uruchomienie testów:
+       python -m unittest discover
 
-Opis testów:
-- test_validate_email: sprawdzanie list poprawnych i niepoprawnych e-maili
+4. Mierzenie pokrycia kodu:
+       python -m coverage run -m unittest discover
+       python -m coverage report -m
+
+   Upewnij się, że jesteś w katalogu głównym projektu (tam, gdzie znajduje się folder zadanie2) i że folder nazywa się dokładnie 'zadanie2'.
+
+Opis implementacji i testów:
+- test_validate_email: poprawne i niepoprawne e-maile
 - test_calculate_rectangle_area: wymiary dodatnie i ujemne, ValueError
-- test_filter_even_numbers: różne listy, oczekiwana filtracja
-- test_convert_date_format: poprawne i niepoprawne formaty daty, ValueError
-- test_is_palindrome: różne teksty, palindromy oraz nie
+- test_filter_even_numbers: filtracja liczb parzystych z listy
+- test_convert_date_format: konwersja daty, obsługa ValueError
+- test_is_palindrome: sprawdzenie palindromu w różnych ciągach
 """
 import unittest
 from app import (
@@ -70,7 +75,7 @@ class TestApp(unittest.TestCase):
         ]
 
     def test_validate_email(self):
-        # Poprawne i niepoprawne e-maile
+        # Test poprawnych i niepoprawnych adresów e-mail
         for email in self.valid_emails:
             with self.subTest(email=email):
                 self.assertTrue(validate_email(email))
@@ -79,7 +84,7 @@ class TestApp(unittest.TestCase):
                 self.assertFalse(validate_email(email))
 
     def test_calculate_rectangle_area(self):
-        # Typowe oraz nietypowe wymiary prostokąta
+        # Wymiary dodatnie i ujemne + ValueError
         for length, width, expected in self.rectangle_dimensions:
             with self.subTest(length=length, width=width):
                 self.assertEqual(calculate_rectangle_area(length, width), expected)
@@ -88,13 +93,13 @@ class TestApp(unittest.TestCase):
                 self.assertRaises(ValueError, calculate_rectangle_area, length, width)
 
     def test_filter_even_numbers(self):
-        # Filtrowanie liczb parzystych
+        # Filtracja liczb parzystych z różnych list
         for data, expected in self.number_lists:
             with self.subTest(data=data):
                 self.assertEqual(filter_even_numbers(data), expected)
 
     def test_convert_date_format(self):
-        # Konwersja daty i obsługa błędnych formatów
+        # Poprawne i niepoprawne formaty daty + ValueError
         for input_date, expected in self.date_formats:
             with self.subTest(input_date=input_date):
                 self.assertEqual(convert_date_format(input_date), expected)
@@ -109,6 +114,6 @@ class TestApp(unittest.TestCase):
                 self.assertEqual(is_palindrome(text), expected)
 
 if __name__ == '__main__':
-    # Uruchomienie testów: python -m unittest discover zadanie2
+    # Uruchomienie testów:
     import sys
     sys.exit(unittest.main())
