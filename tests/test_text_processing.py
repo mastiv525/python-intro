@@ -9,8 +9,7 @@ class TestTextProcessing(unittest.TestCase):
         self.assertEqual(word_count(""), 0)
 
     def test_word_count_invalid(self):
-        with self.assertRaises(ValueError):
-            word_count(None)
+        with self.assertRaises(ValueError): word_count(None)
 
     def test_reverse_words(self):
         self.assertEqual(reverse_words("a b c"), "c b a")
@@ -19,8 +18,4 @@ class TestTextProcessing(unittest.TestCase):
         self.assertEqual(reverse_words("hello"), "hello")
 
     def test_reverse_words_invalid(self):
-        with self.assertRaises(ValueError):
-            reverse_words(None)
-
-if __name__ == '__main__':
-    unittest.main()
+        with self.assertRaises(ValueError): reverse_words(None)

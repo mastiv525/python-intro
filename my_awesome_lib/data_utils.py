@@ -1,15 +1,10 @@
 """
-Moduł data_utils:
-Funkcje do wczytywania i transformacji struktur danych (list, słowników itp.).
+Moduł data_utils: funkcje do wczytywania i transformacji struktur danych.
 """
 
 def flatten_list(nested_list):
     """
     Spłaszcza listę zagnieżdżonych list.
-    Args:
-        nested_list (list of list or items): lista do spłaszczenia
-    Returns:
-        list: spłaszczona lista
     """
     result = []
     for element in nested_list:
@@ -23,10 +18,6 @@ def flatten_list(nested_list):
 def unique_items(seq):
     """
     Zwraca unikalne elementy zachowując kolejność.
-    Args:
-        seq (iterable): wejściowy ciąg elementów
-    Returns:
-        list: lista unikalnych elementów
     """
     seen = set()
     result = []

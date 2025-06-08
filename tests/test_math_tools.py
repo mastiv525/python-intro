@@ -9,8 +9,7 @@ class TestMathTools(unittest.TestCase):
         self.assertEqual(factorial(5), 120)
 
     def test_factorial_negative(self):
-        with self.assertRaises(ValueError):
-            factorial(-1)
+        with self.assertRaises(ValueError): factorial(-1)
 
     def test_is_prime_true(self):
         self.assertTrue(is_prime(7))
