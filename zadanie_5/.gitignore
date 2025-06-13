@@ -1,0 +1,16 @@
+# Python virtual environment
+venv/
+# Cache pyc files
+__pycache__/
+*.py[cod]
+# pliki tymczasowe edytorów
+*.swp
+*.swo
+*.idea/
+.vscode/
+# wyniki pobrań itp.
+download*.html
+links.txt
+links.csv
+headings.csv
+tables.xlsx
