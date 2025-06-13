@@ -1,101 +1,84 @@
-# Raport z Laboratorium 5 – Web Scraping
+# Raport z Zadania 5 – Web Scraping
 
-## 1. Wprowadzenie
+Poniższy plik `raport.md` znajduje się w katalogu `zadanie_5` repozytorium „python-intro”:
 
-Celem laboratorium było stworzenie prostych skryptów w Pythonie do pobierania i parsowania zawartości stron internetowych. W projekcie wykorzystaliśmy dwie popularne biblioteki:
+```
+https://github.com/mastiv525/python-intro/tree/main/zadanie_5
+```
 
-* **requests** – do obsługi zapytań HTTP (GET)
-* **BeautifulSoup** – do parsowania i przetwarzania drzewa HTML
+## 1. Cel zadania
 
-Ponadto rozszerzyliśmy funkcjonalność podstawowych przykładów o:
+* Napisanie dwóch skryptów Pythona do pobierania i analizy stron [WWW](http://WWW).
+* Użycie bibliotek: `requests`, `BeautifulSoup`, `pandas`.
+* Rozszerzenie funkcjonalności: wątkowość, CLI (`argparse`), pomiar czasu, logowanie (`logging`), eksport do plików (HTML, CSV, TXT, XLSX).
 
-* wielowątkowe pobieranie stron
-* pomiar czasu i zapisywanie zawartości do pliku
-* dynamiczny interfejs CLI (`argparse`)
-* zaawansowane logowanie zdarzeń (`logging`)
-* eksport danych (nagłówki, linki, tabele) do plików CSV, TXT i XLSX
+## 2. Struktura katalogu `zadanie_5`
 
-## 2. Zawartość skryptów
+```
+python-intro/
+└── zadanie_5/
+    ├── examples/
+    │   ├── example_requests.py
+    │   └── example_bs4.py
+    ├── requirements.txt
+    ├── README.md
+    └── raport.md
+```
 
-### 2.1 `example_requests.py`
+## 3. Opis plików
 
-1. **Interfejs linii poleceń**: wykorzystanie modułu `argparse` pozwala na podanie:
+* **requirements.txt** – `requests`, `beautifulsoup4`, `pandas`, `openpyxl`.
+* **examples/example\_requests.py** – pobiera listę URL równolegle, mierzy czas, zapisuje każdy HTML do pliku.
+* **examples/example\_bs4.py** – parsuje HTML: liczy nagłówki H1–H3, wyciąga linki, odczytuje tabele do arkusza Excel.
+* **README.md** – instrukcja uruchomienia zadania.
+* **raport.md** – ten dokument.
 
-   * listy adresów URL do pobrania (`urls`)
-   * liczby wątków (`--threads`)
-   * opcjonalnego prefiksu pliku wyjściowego (`--output-prefix`)
-2. **Wielowątkowe pobieranie**: `concurrent.futures.ThreadPoolExecutor` umożliwia równoległe zapytania, co znacząco przyspiesza proces przy większej liczbie URL.
-3. **Pomiar czasu**: funkcja `fetch_html` mierzy czas wykonania żądania HTTP.
-4. **Zapis HTML**: pobrany kod strony zapisywany jest do pliku o nazwie z prefiksem i sanitizowanym URL-em.
-5. **Logowanie**: moduł `logging` rejestruje zdarzenia (INFO) z timestampami, co ułatwia monitorowanie przebiegu skryptu.
+## 4. Instrukcja uruchomienia
 
-### 2.2 `example_bs4.py`
+1. `git clone https://github.com/mastiv525/python-intro.git`
+2. `cd python-intro/zadanie_5`
+3. (opcjonalnie) `python -m venv venv` & aktywacja środowiska:
 
-1. **Dynamiczny CLI**: `argparse` definiuje argumenty:
+   * Windows: `venv\Scripts\activate`
+   * macOS/Linux: `source venv/bin/activate`
+4. `pip install -r requirements.txt`
+5. `python examples/example_requests.py <URL1> <URL2> -t 4 -o prefix`
+6. `python examples/example_bs4.py <URL>`
 
-   * URL do analizy
-   * nazwy plików wynikowych (`--headings-csv`, `--links-txt`, `--links-csv`, `--tables-xlsx`)
-2. **Parsowanie nagłówków**: funkcja `extract_headings` liczy wystąpienia tagów `<h1>`, `<h2>`, `<h3>` i zapisuje statystyki w CSV.
-3. **Wyciąganie linków**:
+## 5. Działanie skryptów
 
-   * `extract_links` zbiera wszystkie linki z atrybutem `href` zachowując tylko te zaczynające się od `http`.
-   * Linki wypisywane są na konsolę (pierwsze 10) i zapisywane do TXT oraz CSV.
-4. **Ekstrakcja tabel**: funkcja `extract_tables` wykorzystuje `pandas.read_html` do konwersji tabel HTML na obiekty `DataFrame` i zapisuje je do arkusza Excel (`.xlsx`).
-5. **Logowanie**: podobnie jak w `example_requests.py`, komunikaty o przebiegu działania są rejestrowane przy pomocy `logging`.
+1. **example\_requests.py**
 
-## 3. Instrukcja uruchomienia
+   * **argparse**: lista URL, `--threads`, `--output-prefix`.
+   * **wątkowość**: `ThreadPoolExecutor` przyspiesza pobieranie.
+   * **pomiar czasu**: `time.time()`.
+   * **zapis HTML**: do plików `prefix_url.html`.
+   * **logging**: komunikaty INFO z timestampem.
 
-1. Sklonuj repozytorium:
+2. **example\_bs4.py**
 
-   ```bash
-   git clone https://github.com/TwojUser/scraping-lab.git
-   cd scraping-lab
-   ```
-2. Utwórz i aktywuj środowisko wirtualne:
+   * **argparse**: URL i nazwy plików wynikowych.
+   * **parsowanie**: `BeautifulSoup`.
+   * **nagłówki**: liczba H1–H3, zapisywane do `headings.csv`.
+   * **linki**: wszystkie `href` rozpoczynające się od `http`, zapis do `links.txt` i `links.csv`.
+   * **tabele**: `pandas.read_html`, zapis do `tables.xlsx`.
 
-   ```bash
-   python -m venv venv
-   source venv/bin/activate      # Windows: venv\Scripts\activate
-   ```
-3. Zainstaluj zależności:
+## 6. Ograniczenia
 
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Uruchom skrypt pobierający HTML (przykład z wieloma URL):
+* **Brak JS**: `requests` nie renderuje JavaScript.
+* **Blokady**: brak obsługi nagłówków przeglądarki, może wystąpić `403` lub CAPTCHA.
+* **Paginacja**: skrypty obsługują tylko jedną stronę.
+* **Legalność**: brak automatycznej weryfikacji `robots.txt`.
+* **Struktura HTML**: niespójne tabele i nagłówki mogą powodować błędy.
 
-   ```bash
-   python examples/example_requests.py https://example.com https://python.org -t 5 -o mysite
-   ```
-5. Uruchom skrypt parsujący HTML:
+## 7. Propozycje usprawnień
 
-   ```bash
-   python examples/example_bs4.py https://en.wikipedia.org/wiki/Web_scraping
-   ```
+* **Selenium/Playwright** do stron dynamicznych.
+* **Cache** lokalne, by unikać wielokrotnego pobierania.
+* Obsługa **paginacji** i linkowania między stronami.
+* Rozszerzone **nagłówki HTTP** i sesje.
+* **Automatyczne testy** funkcjonalne.
 
-## 4. Ograniczenia i wyzwania
+---
 
-1. **Statyczne pobieranie** – `requests` nie wykonuje JavaScript. Strony wymagające renderingu (SPA, AJAX) nie zostaną poprawnie pobrane.
-2. **Zachowanie stron** – brak symulacji przeglądarki (nagłówki, cookies, sesje), co może skutkować blokadą (np. CAPTCHA, `403 Forbidden`).
-3. **Brak obsługi paginacji** – skrypty pobierają tylko jedną stronę, bez iteracji po kolejnych.
-4. **Brak polityki `robots.txt`** – należy ręcznie sprawdzać legalność i dopuszczalne limity pobrań.
-5. **Wątkowość** – dla bardzo dużej liczby URL może wymagać throttlingu lub ograniczeń, by nie przeciążyć serwera.
-6. **Parsing tabel** – nie każda tabela w HTML jest dobrze ustrukturyzowana; `pandas.read_html` może rzucić błąd.
-
-## 5. Możliwe usprawnienia
-
-* Integracja z **Selenium** lub **Playwright** dla stron dynamicznych.
-* Dodanie **cache** lokalnego, by unikać wielokrotnego pobierania tych samych zasobów.
-* Obsługa **paginacji** i nawigacji po linkach wewnętrznych.
-* Zaawansowany **parser treści** (np. wyciąganie danych z JSON lub API w tle).
-* Implementacja **limitów zapytań** według `robots.txt` i przerw między żądaniami.
-* Rozbudowany **monitoring** i **metryki** (np. średni czas odpowiedzi, liczba błędów).
-
-## 6. Podsumowanie
-
-W ramach laboratorium powstały dwa skrypty demonstrujące różne aspekty web scraping’u:
-
-* **example\_requests.py** – skupia się na efektywnym pobieraniu i zapisywaniu zawartości stron.
-* **example\_bs4.py** – pokazuje techniki parsowania HTML, ekstrakcji nagłówków, linków i tabel.
-
-Oba narzędzia można łatwo rozszerzać i integrować w większe aplikacje czy automatyczne procesy ekstrakcji danych. Dokumentacja i modularna budowa kodu ułatwiają dalszy rozwój i utrzymanie.
+*Autor: mastiv525*
